@@ -1,6 +1,6 @@
 const express = require("express");
-
 const authRoutes = require('./routes/authRoutes')
+const taskRoutes= require('./routes/taskRoutes')
 
 require('dotenv').config();
 const app = express();
@@ -17,6 +17,8 @@ app.get('/',(req,res)=>{
 //Conectamos las rutas de autorización 
 //Cualquier petición que empiece con /auth Centralízala y mándala al archivo authRoutes
 app.use('/auth',authRoutes)
+
+app.use('/tasks',taskRoutes)
 
 app.listen(PORT,()=>{
     console.log(`Servidor funciona en http://localhost:${PORT}`)
