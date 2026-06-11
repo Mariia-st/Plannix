@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+
+// Crea las funciones en JS/TS para poder hacer consultas a la base de datos (prisma.task...)
+generator client {
+  provider = "prisma-client-js"
+}
+
+//Configuración de bbdd
+datasource db {
+  provider = "mysql"
+
+}
+
+//creación de la tabla task en bbdd
+
+model Task{
+id Int @id @default(autoincrement()) //id de task como siempre autoincrementado 
+userId Int? // conexion con nuestra tabla de usuarios 
+user User? @relation(fields: [userId], references:[id]) // Objeto de usuario por id 
+title String
+description String?
+status String @default("todo") // @default para valores por defecto
+priority String @default("medium")
+deadline DateTime?
+createdAt DateTime @default(now())
+}
+
+//creación de la tabla user en bbdd
+
+model User{
+  id Int @id @default(autoincrement())
+  name String 
+  email String @unique
+  password String
+  task Task[] // relación con task, puede tener muchos 
+  createdAt DateTime  @default(now())
+
+}
+
+//comandos de prisma 
+// npx prisma db push - actualiza la tabla si ya existe, sincroniza la bbdd con este fichero 
+// npx prisma generate - actualiza node_modules y información de las tablas 
