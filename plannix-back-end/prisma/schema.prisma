@@ -12,7 +12,7 @@ generator client {
 //Configuración de bbdd
 datasource db {
   provider = "mysql"
-
+  url      = env("DATABASE_URL")
 }
 
 //creación de la tabla task en bbdd
