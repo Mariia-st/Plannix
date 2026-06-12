@@ -42,12 +42,12 @@ const createTasks= async (req,res)=>{
 }
 
 const deleteTask= async (req,res)=>{
-    const id=req.params
+    const {id}=req.params //{} - para sacar solo el valor de objeto 
     const userId=req.user.userId
-
+    console.log( id);
     try{
         //deleteMany puede buscar por varios filtros y delete solo por id 
-        const deletedTask= await prisma.task.deleteMany({where:{id:id,userId:userId}})
+        const deletedTask= await prisma.task.deleteMany({where:{id:parseInt(id),userId:userId}}) //parse int convierte string a number
 
 
         if(deletedTask.count ===0){
@@ -56,7 +56,7 @@ const deleteTask= async (req,res)=>{
 
         res.json({message:"Tarea eliminada correctamente"})
     }catch(error){
-
+        console.error("DEBUG ERROR:", error); 
         res.status(500).json({error:"Error al intentar eliminar tarea"})
     }
 
@@ -64,12 +64,12 @@ const deleteTask= async (req,res)=>{
 }
 
 const updateTask= async (req,res)=>{
-    const id=req.params
+    const {id}=req.params
     const {title,description,status,priority, deadline}=req.body
     const userId=req.user.userId
 
     try{
-        const updatedTask= await prisma.task.updateMany({ where:{id:id,userId:userId}
+        const updatedTask= await prisma.task.updateMany({ where:{id:parseInt(id),userId:userId}
             ,data:{
                 title,
                 description,
@@ -93,13 +93,13 @@ const updateTask= async (req,res)=>{
 
 const getTaskbyId =async(req,res)=>{
 
-    const id = req.params.id
+    const {id} = req.params.id
     const userId=req.user.userId
 
     try{
         const task= await prisma.task.findFirst({
             where:{
-                id:id,
+                id:parseInt(id),
                 userId:userId
             }
         })
@@ -111,4 +111,4 @@ const getTaskbyId =async(req,res)=>{
     }
 }
 
-module.exports = {getTasks,createTasks}
+module.exports = {getTasks,createTasks,deleteTask,updateTask,getTaskbyId}
