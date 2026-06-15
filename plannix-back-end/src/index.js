@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors")
 const authRoutes = require('./routes/authRoutes')
 const taskRoutes= require('./routes/taskRoutes')
 
@@ -6,6 +7,13 @@ require('dotenv').config();
 const app = express();
 
 const PORT = 3000;
+
+//  CORS para todas las peticiones 
+app.use(cors({
+    origin: 'http://localhost:5173', // mi front
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}));
 
 //Conectamos el middleware para leer jgon
 app.use(express.json())
