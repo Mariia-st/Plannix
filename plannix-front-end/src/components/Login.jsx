@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-import { error } from "three/src/utils.js";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -9,12 +10,18 @@ export default function Login() {
     password: "",
   });
 
-  const [isRegistering, setIsRegistering] = useState(false);
+  const navigate =useNavigate()
+  const [isRegistering, setIsRegistering] = useState(false); //control interfaz de formulario
+  const [loading,setLoading]= useState(false) //control de boton
+  const [error, setError] = useState(null); //control error
 
+
+  //login/register
   const handleSubmit = async () => {
+    setError(null)
     // Si isRegistering es true, usamos la ruta de registro
     const endpoint = isRegistering ? "auth/register" : "auth/login";
-
+    setLoading(true)
     try {
       const response = await api.post(endpoint, formData);
       console.log(response);
@@ -25,8 +32,12 @@ export default function Login() {
       } else if (isRegistering) {
         setIsRegistering(false); // Cambiamos a login tras registrarse
       }
+      navigate("/home")
+      
     } catch (error) {
-      console.log(error);
+      setError("Error: credenciales incorrectas o servidor no disponible.");
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -89,10 +100,14 @@ export default function Login() {
           />
           <label htmlFor="floatingPassword">Contraseña</label>
         </div>
+        <div className=" text-danger small ">
+          {error}
+        </div>
 
         <button
-          type="button"
+          type="submit"
           onClick={handleSubmit}
+          disabled={loading}
           className="btn btn-outline-dark mt-2"
         >
           {isRegistering ? "Registrarme" : "Login"}
