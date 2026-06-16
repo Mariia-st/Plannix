@@ -31,13 +31,13 @@ const createTasks= async (req,res)=>{
                 description:description,
                 status:status,
                 priority:priority,
-                deadline:deadline,
+                deadline:deadline ? new Date(deadline).toISOString() : null,
                 userId: userId
             }
         })
         res.status(201).json(newTask)
     }catch(error){
-        res.status(500).json({error:"No se pudo crear la tarea"})
+        res.status(500).json({error:"No se pudo crear la tarea",details:error.message})
     }
 }
 
@@ -93,7 +93,7 @@ const updateTask= async (req,res)=>{
 
 const getTaskbyId =async(req,res)=>{
 
-    const {id} = req.params.id
+    const {id} = req.params
     const userId=req.user.userId
 
     try{
