@@ -23,8 +23,8 @@ userId Int? // conexion con nuestra tabla de usuarios
 user User? @relation(fields: [userId], references:[id]) // Objeto de usuario por id 
 title String
 description String?
-status String @default("todo") // @default para valores por defecto
-priority String @default("medium")
+status String @default("pediente") // @default para valores por defecto
+priority String
 deadline DateTime?
 createdAt DateTime @default(now())
 }
