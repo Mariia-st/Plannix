@@ -5,36 +5,19 @@ import TaskForm from "./Task/TaskForm";
 import TaskDetail from "./Task/TaskDetail";
 
 export default function Home() {
+
+  //lista de tareas
   const [tasks, setTasks] = useState(null);
+  // para sacar info de una tarea en concreto
   const [task, setTask] = useState(null);
+  //error de validación
   const [error, setError] = useState(null);
-  const [infoTask, setInfoTask] = useState(false);
+  //control de boton
+  const [loading,setLoading]= useState(false) 
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-  async function fetchData() {
-    try {
-      const response = await api.get("tasks");
-      setTasks(response.data);
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
-  async function deleteTask(id) {
-    try {
-      const response = await api.delete(`tasks/${id}`);
-      console.log(response);
-      fetchData();
-      setTask(null);
-      setInfoTask(false);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
+// formulario de insertar nueva tarea
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -43,6 +26,7 @@ export default function Home() {
     deadline: "",
   });
 
+  // estado visual de prioridad de tarea
   const priorityColors = {
     baja: "bg-success",
     media: "bg-warning",
@@ -50,26 +34,39 @@ export default function Home() {
     urgente: "text-white bg-dark",
   };
 
-  async function handleTouch(id) {
-    setInfoTask(true);
+
+  // llama desde inicio al get de tareas 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  //saca todas las tareas
+  async function fetchData() {
+    setLoading(true)
     try {
-      const response = await api.get(`tasks/${id}`);
-      setTask(response.data);
-      console.log(response);
+      const response = await api.get("tasks");
+      setTasks(response.data);
+      
     } catch (error) {
       console.log(error);
+    }finally{
+      setLoading(false)
     }
+
   }
 
+
+  //creación de nueva tarea
   const heandleSubmit = async (e) => {
     e.preventDefault(); //sin recarga
     setError(null);
     if (formData.title === "") {
       return setError("El titulo es obligatorio");
     }
+    setLoading(true)
     try {
       const response = await api.post("/tasks", formData);
-      console.log(response);
+     
       fetchData();
       setFormData({
         title: "",
@@ -78,12 +75,69 @@ export default function Home() {
         priority: "baja",
         deadline: "",
       });
+
     } catch (error) {
       console.log(error);
+    }finally{
+      setLoading(false)
     }
   };
+
+// elimina la tarea concreta
+  async function deleteTask(id) {
+
+    setLoading(true)
+    try {
+      const response = await api.delete(`tasks/${id}`);
+      fetchData();
+      setTask(null);
+    
+    } catch (error) {
+      console.log(error);
+    }finally{
+      setLoading(false)
+    }
+  }
+
+
+  //actualiza la tarea concreta
+  async function updateTask(updatedTask){
+   
+    setLoading(true)
+    try{
+      const response = await api.put(`tasks/${updatedTask.id}`,updatedTask)
+      console.log(response)
+      fetchData()
+      setTask(null);
+  
+
+    } catch (error) {
+      console.log(error);
+    }finally{
+      setLoading(false)
+    }
+  }
+
+
+
+  // hace petición al obtener la información de una tarea en concreto
+  async function getTaskById(id) {
+   
+
+    setLoading(true)
+    try {
+      const response = await api.get(`tasks/${id}`);
+      setTask(response.data);
+      
+    } catch (error) {
+      console.log(error);
+    }finally{
+      setLoading(false)
+    }
+  }
+
   const handleCloseTask = () => {
-    setInfoTask(false);
+  
     setTask(null);
   };
 
@@ -91,19 +145,24 @@ export default function Home() {
     <div className=" container ">
       <div className="row">
         <div>
+        {task !== null && (
           <div>
             <TaskDetail
               task={task}
               onClose={handleCloseTask}
               onDelete={deleteTask}
               priorityColors={priorityColors}
+              updateTask={updateTask}
+              loading={loading}
             />
           </div>
+          )}
           <div className="d-flex  gap-5">
             <TaskList
               tasks={tasks}
-              onSelectTask={handleTouch}
+              onSelectTask={getTaskById}
               priorityColors={priorityColors}
+              loading={loading}
             />
 
             <TaskForm
@@ -111,6 +170,7 @@ export default function Home() {
               formData={formData}
               setFormData={setFormData}
               onSubmit={heandleSubmit}
+              loading={loading}
             />
           </div>
         </div>
