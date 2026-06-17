@@ -8,6 +8,7 @@ export default function Layout({ children }) {
   useEffect(() => {
     let vantaEffect;
 
+    if (vantaRef.current) {
     // Inicialización del efecto una vez que el componente se monta
     vantaEffect = HALO.default({
       el: vantaRef.current, // Elemento donde se renderiza la animación
@@ -23,7 +24,7 @@ export default function Layout({ children }) {
       backgroundColor: 0xf5f5f5,
       points: 14.00,
       maxDistance: 14.00
-    });
+    })};
 
     // Limpieza: destruimos el efecto al desmontar el componente
     // para evitar fugas de memoria y ralentización del navegador
