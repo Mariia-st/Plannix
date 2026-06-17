@@ -68,14 +68,19 @@ const updateTask= async (req,res)=>{
     const {title,description,status,priority, deadline}=req.body
     const userId=req.user.userId
 
+    if(!title){
+        res.status(400).json({error:"El titulo es obligatorio"}) 
+    }
+
     try{
+        const formattedDeadline = deadline ? new Date(deadline).toISOString() : null;
         const updatedTask= await prisma.task.updateMany({ where:{id:parseInt(id),userId:userId}
             ,data:{
                 title,
                 description,
                 status,
                 priority,
-                deadline
+                deadline:formattedDeadline
             }})
 
 
@@ -84,7 +89,7 @@ const updateTask= async (req,res)=>{
             }
             res.json({message:"Tarea actualizada correctamente"})
     }catch(error){
-        return res.status(500).json({error:"Error al actualizar tarea"})
+        return res.status(500).json({error:"Error al actualizar tarea",details:error.message})
     }
 
     

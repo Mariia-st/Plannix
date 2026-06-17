@@ -7,7 +7,7 @@ const authenticateToken=require('../middlewares/authMiddleware')
 router.get('/',authenticateToken,getTasks)
 router.post('/',authenticateToken,createTasks)
 router.delete('/:id',authenticateToken,deleteTask)
-router.post('/:id',authenticateToken,updateTask)
+router.put('/:id',authenticateToken,updateTask)
 router.get('/:id',authenticateToken,getTaskbyId)
 
 
