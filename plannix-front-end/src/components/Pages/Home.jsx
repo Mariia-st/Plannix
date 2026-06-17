@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import api from "../api/axios";
-import TaskList from "./Task/TaskList";
-import TaskForm from "./Task/TaskForm";
-import TaskDetail from "./Task/TaskDetail";
+import api from "../../api/axios";
+import TaskList from "../Task/TaskList";
+import TaskForm from "../Task/TaskForm";
+import TaskDetail from "../Task/TaskDetail";
 
 export default function Home() {
 
