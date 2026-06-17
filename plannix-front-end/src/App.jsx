@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import Login from "./components/login";
-import Layout from "./components/Layout";
-import Home from "./components/Home";
+import Login from "./components/Pages/Login";
+import Layout from "./components/Pages/Layout";
+import Home from "./components/Pages/Home";
 
 
 export default function App() {
