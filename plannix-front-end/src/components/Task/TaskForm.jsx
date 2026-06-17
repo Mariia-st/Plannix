@@ -1,21 +1,23 @@
 // components/TaskForm.js
-export default function TaskForm({ formData, setFormData, onSubmit, error }) {
+export default function TaskForm({ formData, setFormData, onSubmit, error,loading }) {
   
     const handleChange = (e) => {
       const { name, value } = e.target;
       setFormData((prev) => ({ ...prev, [name]: value }));
     };
+ 
   
     return (
       <div className="card border-0 shadow-sm p-4 h-100" >
         <h4 className="mb-4">Crear nueva tarea</h4>
-        <form className="d-flex flex-column gap-3" onSubmit={onSubmit}>
+        <form className="d-flex flex-column gap-3" onSubmit={onSubmit} >
           <input 
             name="title" 
             placeholder="Título" 
             className="form-control" 
             onChange={handleChange} 
-            value={formData.title} 
+            value={ formData.title} 
+          
           />
           <div className="text-danger small ">{error}</div>
           <textarea 
@@ -50,7 +52,7 @@ export default function TaskForm({ formData, setFormData, onSubmit, error }) {
             onChange={handleChange} 
             value={formData.deadline} 
           />
-          <button type="submit" className="btn btn-primary w-100">Guardar Tarea</button>
+          <button type="submit" className="btn btn-primary w-100"  disabled={loading}>Guardar Tarea</button>
         </form>
       </div>
     );
