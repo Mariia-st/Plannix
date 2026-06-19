@@ -15,8 +15,6 @@ export default function Home() {
   //control de boton
   const [loading,setLoading]= useState(false) 
 
-
-
 // formulario de insertar nueva tarea
   const [formData, setFormData] = useState({
     title: "",
@@ -49,6 +47,7 @@ export default function Home() {
       
     } catch (error) {
       console.log(error);
+
     }finally{
       setLoading(false)
     }
@@ -58,12 +57,16 @@ export default function Home() {
 
   //creación de nueva tarea
   const heandleSubmit = async (e) => {
+
     e.preventDefault(); //sin recarga
     setError(null);
+    
     if (formData.title === "") {
       return setError("El titulo es obligatorio");
     }
+    
     setLoading(true)
+
     try {
       const response = await api.post("/tasks", formData);
      
@@ -78,6 +81,7 @@ export default function Home() {
 
     } catch (error) {
       console.log(error);
+
     }finally{
       setLoading(false)
     }
@@ -87,6 +91,7 @@ export default function Home() {
   async function deleteTask(id) {
 
     setLoading(true)
+
     try {
       const response = await api.delete(`tasks/${id}`);
       fetchData();
@@ -94,6 +99,7 @@ export default function Home() {
     
     } catch (error) {
       console.log(error);
+
     }finally{
       setLoading(false)
     }
@@ -104,6 +110,7 @@ export default function Home() {
   async function updateTask(updatedTask){
    
     setLoading(true)
+
     try{
       const response = await api.put(`tasks/${updatedTask.id}`,updatedTask)
       console.log(response)
@@ -113,6 +120,7 @@ export default function Home() {
 
     } catch (error) {
       console.log(error);
+
     }finally{
       setLoading(false)
     }
@@ -122,34 +130,33 @@ export default function Home() {
 
   // hace petición al obtener la información de una tarea en concreto
   async function getTaskById(id) {
-   
-
+  
     setLoading(true)
+
     try {
       const response = await api.get(`tasks/${id}`);
       setTask(response.data);
       
     } catch (error) {
       console.log(error);
+
     }finally{
       setLoading(false)
     }
   }
 
-  const handleCloseTask = () => {
   
-    setTask(null);
-  };
 
   return (
     <div className=" container ">
       <div className="row">
         <div>
+          {/* si task no elegido */}
         {task !== null && (
           <div>
             <TaskDetail
               task={task}
-              onClose={handleCloseTask}
+              onClose={()=>setTask(null)}
               onDelete={deleteTask}
               priorityColors={priorityColors}
               updateTask={updateTask}
