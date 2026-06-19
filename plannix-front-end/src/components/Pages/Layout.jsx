@@ -8,10 +8,10 @@ import * as THREE from "three"; // importamos tree js para vanta para renderizad
 import HALO from "vanta/dist/vanta.net.min"; // importamos efecto desde vanta
 
 export default function Layout({ children }) {
-  const { user, loading } = useContext(UserContext);
 
+  //variables de rutas/ user,logout/ sectiondeUsuario
+  const { user, logout } = useContext(UserContext);
   const location = useLocation();
-
   const isUserSection = location.pathname !== "/";
 
   const vantaRef = useRef(null); // Referencia para montar el efecto Vanta directamente en el DOM
@@ -58,6 +58,7 @@ export default function Layout({ children }) {
           <div>
 
          <div className=" px-2   bg-body text-black text-center rounded rounded-circle">{user ? user.name[0] : "Cargando..."}</div>
+          <div><button onClick={logout}>logOut</button></div>
           </div>
            
 
