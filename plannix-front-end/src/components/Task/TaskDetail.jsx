@@ -1,38 +1,48 @@
 import { useState } from "react";
 import { useEffect } from "react";
 // components/TaskDetail.js
-export default function TaskDetail({
-  task,
-  onClose,
-  onDelete,
-  priorityColors,
-  loading,
-  updateTask,
-}) {
+export default function TaskDetail({task,onClose,onDelete,priorityColors,loading,updateTask,}) {
+
+  //variables de error de titulo/  update estado de formulario/ taskUpdates datos de task actualizado
   const [inputError, setInputError] = useState("");
   const [updated, setUpdated] = useState(false);
   const [taskUpdated, setTaskUpdated] = useState(task);
 
+// sacamos datos de task  para mostrar y cambiarlos
   useEffect(() => {
     setTaskUpdated(task);
   }, [task]);
 
+
+  // guardamos los datos cambiados 
   const handleChange = (e) => {
+
     const { name, value } = e.target;
+
     setTaskUpdated((prev) => ({ ...prev, [name]: value }));
+
+    // si titulo no esta sereamos el error
     if (name === "title") {
+
       if (value.trim() === "") {
+
         setInputError("El título es obligatorio");
+
       } else {
+
         setInputError("");
       }
+
     }
+
   };
 
+  // cerramos la edición y volvemos datos viejos de tarea
   function cancel() {
     setUpdated(false);
     setTaskUpdated(task);
   }
+  
   return (
     <div className="fade-in mb-4 d-flex justify-content-center">
       <div className="card shadow-sm w-100" style={{ maxWidth: "700px" }}>

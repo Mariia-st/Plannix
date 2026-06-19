@@ -1,6 +1,7 @@
 // components/TaskForm.js
 export default function TaskForm({ formData, setFormData, onSubmit, error,loading }) {
   
+  // guardamos datos de formulario
     const handleChange = (e) => {
       const { name, value } = e.target;
       setFormData((prev) => ({ ...prev, [name]: value }));
