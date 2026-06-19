@@ -16,7 +16,10 @@ const register = async (req, res) => {
     const user = await prisma.user.create({
       data: { name, email, password: hashedPassword },
     });
-    res.status(200).json({ menssage: "Usuario creado con exito", user: user });
+
+    const token = jwt.sign({ userId: user.id }, SECRET_KEY, { expiresIn: "30m" });
+
+    res.status(200).json({ menssage: "Usuario creado con exito", user: user, token:token });
   } catch (error) {
     //si email se repite
     if (error.code === "ER_DUP_ENTRY" || error.errno === 1062) {
