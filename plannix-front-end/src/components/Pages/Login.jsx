@@ -1,46 +1,56 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import api from "../../api/axios";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../service/UserProvider";
 
 
 export default function Login() {
+
+  //datos de usuario 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
 
+  //variables de control/ nevegación/ userContext
   const navigate =useNavigate()
   const [isRegistering, setIsRegistering] = useState(false); //control interfaz de formulario
   const [loading,setLoading]= useState(false) //control de boton
   const [error, setError] = useState(null); //control error
+  const {setTokenUser}= useContext(UserContext) // user provider para asignar el token
 
 
-  //login/register
-  const handleSubmit = async () => {
+  //método de logearse o registrarse
+  const handleSubmit = async (e) => {
+ 
+    e.preventDefault()
     setError(null)
+    setLoading(true)
+
     // Si isRegistering es true, usamos la ruta de registro
     const endpoint = isRegistering ? "auth/register" : "auth/login";
-    setLoading(true)
+
     try {
       const response = await api.post(endpoint, formData);
-      console.log(response);
+    
+      // Guardamos el token si viene
+      if ( response.data.token) {
+        //guardamos el token en userContext tras un metodo 
+         await setTokenUser(response.data.token)
 
-      // Si fue login, guardamos el token
-      if (!isRegistering && response.data.token) {
-        localStorage.setItem("token", response.data.token);
-      } else if (isRegistering) {
-        setIsRegistering(false); // Cambiamos a login tras registrarse
-      }
-      navigate("/home")
+         navigate("/home")
+      } 
       
     } catch (error) {
       setError("Error: credenciales incorrectas o servidor no disponible.");
+      
     }finally{
       setLoading(false)
     }
   };
 
+  //método de guardar datos 
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -54,7 +64,7 @@ export default function Login() {
     <div>
       <form
         className=" bg-light-subtle  d-flex flex-column p-5 gap-3 rounded-5"
-        action=""
+        onSubmit={handleSubmit}
       >
         <h2 className="text-black text-center">
           {isRegistering ? "Registro" : "Login"}
@@ -106,7 +116,6 @@ export default function Login() {
 
         <button
           type="submit"
-          onClick={handleSubmit}
           disabled={loading}
           className="btn btn-outline-dark mt-2"
         >
