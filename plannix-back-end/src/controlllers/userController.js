@@ -1,8 +1,10 @@
 const path = require("path");
 const prisma = require("../db")
 const fs =  require("fs")//file system
+const bcrypt = require("bcryptjs");
 
 
+// asiganr el avatar de usuario y eliminar el foto viejo
 const updateAvatar = async (req, res) => {
 
     const userId = req.user.userId
@@ -14,6 +16,7 @@ const updateAvatar = async (req, res) => {
       }
 
       const user= await prisma.user.findFirst({where:{id:userId}})
+
 
       if(user && user.avatar){
 
@@ -42,7 +45,44 @@ const updateAvatar = async (req, res) => {
   };
 
 
+  //cambio de contraseña
+  const changePassword= async(req,res)=>{
+    
+    const {oldPassword, newPassword}= req.body
+    const userId= req.user.userId
+    
+    
+    try{
+      
+      const user = await prisma.user.findUnique({ where: { id: userId } });
 
+
+
+      if (!user) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+      
+      //comparamos la contraseña vieja 
+      const isMatch = await bcrypt.compare(oldPassword, user.password);
+
+      if (!isMatch) {
+        return res.status(401).json({ message: "La contraseña actual es incorrecta" });
+      }
+      const saltRounds = 10;
+     const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
+
+      const response= await prisma.user.update({where:{id:userId},data:{password:hashedNewPassword}})
+      return res.status(200).json({ message: "Contraseña actualizada correctamente" });
+
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Error interno del servidor" });
+    }
+
+  }
+
+
+//cambios de nombre y email de usuario
 const changeDataUser= async (req,res)=>{
 
     const {name,email}=req.body
@@ -76,4 +116,4 @@ const changeDataUser= async (req,res)=>{
 }
 
 
- module.exports ={changeDataUser,updateAvatar}
+ module.exports ={changeDataUser,updateAvatar,changePassword}
