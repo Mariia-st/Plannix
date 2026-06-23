@@ -3,6 +3,7 @@ import Login from "./components/Pages/Login";
 import Layout from "./components/Pages/Layout";
 import Home from "./components/Pages/Home";
 import { ProtectedRoute } from "./service/ProtectedRoute";
+import User from "./components/Pages/User";
 
 
 export default function App() {
@@ -10,7 +11,8 @@ export default function App() {
     <Layout>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="home" element={ <ProtectedRoute> <Home /> </ProtectedRoute> } />
+        <Route path="inicio" element={ <ProtectedRoute> <Home /> </ProtectedRoute> } />
+        <Route path="perfil" element={ <ProtectedRoute> <User /> </ProtectedRoute> } />
       </Routes>
     </Layout>
   );

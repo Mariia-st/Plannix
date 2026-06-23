@@ -39,7 +39,7 @@ export default function Login() {
         //guardamos el token en userContext tras un metodo 
          await setTokenUser(response.data.token)
 
-         navigate("/home")
+         navigate("/inicio")
       } 
       
     } catch (error) {
