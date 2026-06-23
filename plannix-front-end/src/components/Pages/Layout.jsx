@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../../service/UserProvider";
 import { useContext } from "react";
 
@@ -9,10 +9,11 @@ import HALO from "vanta/dist/vanta.net.min"; // importamos efecto desde vanta
 
 export default function Layout({ children }) {
 
-  //variables de rutas/ user,logout/ sectiondeUsuario
+  //variables de rutas/ user,logout/ sectiondeUsuario /navegación
   const { user, logout } = useContext(UserContext);
   const location = useLocation();
   const isUserSection = location.pathname !== "/";
+  const navigate= useNavigate()
 
   const vantaRef = useRef(null); // Referencia para montar el efecto Vanta directamente en el DOM
 
@@ -51,19 +52,46 @@ export default function Layout({ children }) {
         <div>Plannix</div>
         {isUserSection &&
         (
-        <div className="d-flex gap-2">
-          <div>{user ? user.name : "Cargando..."}
           
-          </div>
-          <div>
-
-         <div className=" px-2   bg-body text-black text-center rounded rounded-circle">{user ? user.name[0] : "Cargando..."}</div>
-          <div><button onClick={logout}>logOut</button></div>
-          </div>
-           
 
 
+          <div className="d-flex gap-2 ">
+            <div className="d-flex flex-column">
+
+            <span className="fw-bold text-white small">
+              {user ? user.email : "Cargando..."}
+            </span>
+            <button 
+              className="btn btn-sm btn-link text-decoration-none text-white p-0" 
+              onClick={logout}
+              style={{ fontSize: '0.8rem' }}
+            >
+              Cerrar sesión
+            </button>
+            </div>
+       
+          
+            {user.avatar ? (
+                <img type="button" onClick={()=>navigate("/perfil")}
+                  src={`http://localhost:3000${user.avatar}`} // Ajusta la URL de tu servidor
+                  alt="Avatar"
+                  className="rounded-circle shadow-sm"
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    objectFit: "cover",
+                  }}
+                />
+              ) : (
+                <div type="button" onClick={()=>navigate("/perfil")}
+                  className="bg-light text-secondary d-flex align-items-center justify-content-center rounded-circle shadow-sm"
+                  style={{ width: "40px", height: "40px", fontSize: "1.2rem" }}
+                >
+                  {user.name[0].toUpperCase()}
+                </div>
+              )}
         </div>
+         
       )
         }
         
