@@ -19,7 +19,8 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.2.0",
-    "prisma": "^5.22.0"
+    "prisma": "^5.22.0",
+    "telegraf": "^4.16.3"
   },
   "devDependencies": {
     "@types/node": "^25.9.3",
