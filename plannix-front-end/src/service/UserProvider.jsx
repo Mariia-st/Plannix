@@ -65,7 +65,7 @@ export const UserProvider = ({ children }) => {
 
   return (
     // pasa los datos
-    <UserContext.Provider value={{ user,loading, logout, setTokenUser, }}>
+    <UserContext.Provider value={{ user,loading, logout, setTokenUser,fetchUser }}>
       {children}
     </UserContext.Provider>
   );
