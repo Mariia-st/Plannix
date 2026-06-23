@@ -1,11 +1,13 @@
 const express= require('express');
+const authenticateToken=require('../middlewares/authMiddleware')
 //exportamos metodos 
-const {register,login}= require('../authController');
+const {register,login,me}= require('../controlllers/authController');
 //express router para asignar rutas
 const router= express.Router();
 //rutas 
 router.post('/register',register);
 router.post('/login',login);
+router.get("/me", authenticateToken,me)
 
 
 module.exports = router ;
