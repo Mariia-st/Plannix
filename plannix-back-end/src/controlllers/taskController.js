@@ -1,5 +1,5 @@
 
-const prisma= require('./db')
+const prisma= require('../db')
 
 
 const getTasks= async (req,res)=>{

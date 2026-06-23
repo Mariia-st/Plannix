@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const prisma = require("./db");
+const prisma = require("../db")
 //llave secreto para firma de jwt, para asegurar que el token es real
 const SECRET_KEY = process.env.SECRET_KEY || "local_secret_key";
 
@@ -58,6 +58,7 @@ const me = async (req, res) => {
     res.status(200).json({
       name: user.name,
       email: user.email,
+      avatar:user.avatar,
     });
   } catch (error) {
     res.status(500).json({ message: "Error interno de servidor",details:error.message });
