@@ -26,8 +26,8 @@ export default function Layout({ children }) {
         mouseControls: true,
         touchControls: true,
         gyroControls: false,
-        minHeight: 200.0,
-        minWidth: 200.0,
+        minHeight: 100.0,
+        minWidth: 100.0,
         scale: 1.0,
         scaleMobile: 1.0,
         color: 0x0,
@@ -97,7 +97,7 @@ export default function Layout({ children }) {
 
       <main
         ref={vantaRef}
-        className="flex-grow-1 d-flex flex-column justify-content-center align-items-center"
+        className="flex-grow-1 d-flex flex-column justify-content-center align-items-center py-4"
       >
         <div style={{ position: "relative", zIndex: 1 }}>{children}</div>
       </main>
