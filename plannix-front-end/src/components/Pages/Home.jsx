@@ -14,12 +14,14 @@ export default function Home() {
   const [error, setError] = useState(null);
   //control de boton
   const [loading,setLoading]= useState(false) 
+  //codigo 
+  const[code,setCode]=useState("")
 
 // formulario de insertar nueva tarea
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    status: "pediente",
+    status: "pendiente",
     priority: "baja",
     deadline: "",
   });
@@ -145,6 +147,23 @@ export default function Home() {
     }
   }
 
+
+  async function getCode(){
+    setLoading(true)
+
+    try {
+      const response = await api.get(`user/code`);
+      setCode(response.data.code);
+   
+      
+    } catch (error) {
+      console.log(error);
+
+    }finally{
+      setLoading(false)
+    }
+  }
+
   
 
   return (
@@ -179,6 +198,26 @@ export default function Home() {
               onSubmit={heandleSubmit}
               loading={loading}
             />
+          </div>
+          <div className="pt-5">
+            <section className="bg-white rounded border d-flex p-4 gap-5  justify-content-evenly ">
+
+              <div>
+                <h3>Uso de telegram bot</h3>
+                <ul className=" text-secondary">
+                  <li>Pinchar al boton de recibir el <span className=" badge bg-primary">code</span> </li>
+                  <li>Pasar al enlace del bot en telegram</li>
+                  <li>Pinchar start</li>
+                  <li>Escribir este codigo </li>
+                </ul>
+              </div>
+
+              <div>
+                <button className="btn btn-sm btn-dark" onClick={getCode}> recibir el codigo</button>
+                <h3>Code:{code}</h3>
+              </div>
+
+            </section>
           </div>
         </div>
       </div>
