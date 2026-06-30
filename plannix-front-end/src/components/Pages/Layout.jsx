@@ -26,22 +26,36 @@ export default function Layout({ children }) {
         mouseControls: true,
         touchControls: true,
         gyroControls: false,
-        minHeight: 100.0,
-        minWidth: 100.0,
         scale: 1.0,
         scaleMobile: 1.0,
         color: 0x0,
         backgroundColor: 0xf5f5f5,
         points: 14.0,
         maxDistance: 14.0,
+        forceAnimate: true,
+
       });
+  
     }
 
-    // Limpieza: destruimos el efecto al desmontar el componente
-    // para evitar fugas de memoria y ralentización del navegador
-    return () => {
-      if (vantaEffect) vantaEffect.destroy();
-    };
+    // Si abres un detalle y el DOM cambia, forzamos el redibujado:
+  const handleResize = () => {
+    if (vantaEffect) vantaEffect.resize();
+  };
+
+
+  // cuando se cambia el tamaño de contenedor se redibuja el efecto 
+  const observer = new ResizeObserver(handleResize);
+  if (vantaRef.current) observer.observe(vantaRef.current);
+
+  // Limpieza: destruimos el efecto al desmontar el componente
+  // para evitar fugas de memoria y ralentización del navegador
+  return () => {
+    observer.disconnect();
+    if (vantaEffect) vantaEffect.destroy();
+  };
+
+   
   }, []);
 
   return (
@@ -97,7 +111,7 @@ export default function Layout({ children }) {
 
       <main
         ref={vantaRef}
-        className="flex-grow-1 d-flex flex-column justify-content-center align-items-center py-4"
+        className="flex-grow-1 d-flex flex-column justify-content-center align-items-center py-3 "
       >
         <div style={{ position: "relative", zIndex: 1 }}>{children}</div>
       </main>
