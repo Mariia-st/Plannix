@@ -1,5 +1,5 @@
-
-const prisma= require('../db')
+//llamamos a los métodos de servicio
+const taskService=require("./service/taskService")
 
 
 const getTasks= async (req,res)=>{
@@ -7,9 +7,11 @@ const getTasks= async (req,res)=>{
     const userId= req.user.userId
 
     try{
-        //todos filtados por el id de este usuario
-        const tasks= await prisma.task.findMany({where: {userId:userId}})
-        res.json(tasks)
+       
+        const tasks= await taskService.getTasks(userId)
+
+        res.status(200).json(tasks)
+
     }catch(error){
         res.status(500).json({error:"Error al obtener tareas"})
     }
@@ -21,12 +23,11 @@ const createTasks= async (req,res)=>{
     const {title,description,status,priority, deadline}=req.body
 
     if(!title){
-        req.status(400).json({error:"El titulo es obligatorio"})
+        res.status(400).json({error:"El titulo es obligatorio"})
     }
 
     try{
-        const newTask = await prisma.task.create({
-            data:{
+        const data={
                 title:title,
                 description:description,
                 status:status,
@@ -34,8 +35,10 @@ const createTasks= async (req,res)=>{
                 deadline:deadline ? new Date(deadline).toISOString() : null,
                 userId: userId
             }
-        })
+        const newTask= await taskService.createTasks(data)
+
         res.status(201).json(newTask)
+
     }catch(error){
         res.status(500).json({error:"No se pudo crear la tarea",details:error.message})
     }
@@ -44,17 +47,18 @@ const createTasks= async (req,res)=>{
 const deleteTask= async (req,res)=>{
     const {id}=req.params //{} - para sacar solo el valor de objeto 
     const userId=req.user.userId
-    console.log( id);
+
     try{
         //deleteMany puede buscar por varios filtros y delete solo por id 
-        const deletedTask= await prisma.task.deleteMany({where:{id:parseInt(id),userId:userId}}) //parse int convierte string a number
-
+        const deletedTask= await taskService.deleteTask(userId,id)
 
         if(deletedTask.count ===0){
             return res.status(404).json({error:"Tarea no encontrada o no tienes permiso para borrarla"})
         }
 
         res.json({message:"Tarea eliminada correctamente"})
+
+
     }catch(error){
         console.error("DEBUG ERROR:", error); 
         res.status(500).json({error:"Error al intentar eliminar tarea"})
@@ -74,15 +78,15 @@ const updateTask= async (req,res)=>{
 
     try{
         const formattedDeadline = deadline ? new Date(deadline).toISOString() : null;
-        const updatedTask= await prisma.task.updateMany({ where:{id:parseInt(id),userId:userId}
-            ,data:{
+        const data={
                 title,
                 description,
                 status,
                 priority,
                 deadline:formattedDeadline
-            }})
+            }
 
+        const updatedTask= await taskService.updateTask(data,userId,id)
 
             if(updatedTask.count === 0){
                 return res.status(404).json({error:"Tarea no encontrada o no tienes permiso para modificarla"})
@@ -102,12 +106,7 @@ const getTaskbyId =async(req,res)=>{
     const userId=req.user.userId
 
     try{
-        const task= await prisma.task.findFirst({
-            where:{
-                id:parseInt(id),
-                userId:userId
-            }
-        })
+        const task= await taskService.getTaskbyId(userId,id)
         if (!task) return res.status(404).json({ error: "Tarea no encontrada" });
 
         res.json(task);
