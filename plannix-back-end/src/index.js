@@ -26,8 +26,9 @@ require('dotenv').config();
 app.use(cors({
     origin: 
     ['http://localhost:5173', 
-    'https://plannix-eosin.vercel.app',
-    'https://plannix-hr03s67y2-mariia-str-project.vercel.app'],
+        'https://plannix-eosin.vercel.app',
+        'https://plannix-hr03s67y2-mariia-str-project.vercel.app',
+        'https://plannix-bmkiatgv2-mariia-str-project.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
