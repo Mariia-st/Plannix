@@ -25,7 +25,6 @@ require('dotenv').config();
 //  CORS para todas las peticiones 
 app.use(cors({
     origin: function (origin, callback) {
-        
         if (!origin || 
             origin.includes('localhost') || 
             origin.endsWith('.vercel.app')) {
