@@ -29,7 +29,7 @@ export default function Login() {
     setLoading(true)
 
     // Si isRegistering es true, usamos la ruta de registro
-    const endpoint = isRegistering ? "auth/register" : "auth/login";
+    const endpoint = isRegistering ? "/auth/register" : "/auth/login";
 
     try {
       const response = await api.post(endpoint, formData);
