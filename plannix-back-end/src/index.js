@@ -24,11 +24,16 @@ require('dotenv').config();
 
 //  CORS para todas las peticiones 
 app.use(cors({
-    origin: 
-    ['http://localhost:5173', 
-        'https://plannix-eosin.vercel.app',
-        'https://plannix-hr03s67y2-mariia-str-project.vercel.app',
-        'https://plannix-bmkiatgv2-mariia-str-project.vercel.app'],
+    origin: function (origin, callback) {
+        
+        if (!origin || 
+            origin.includes('localhost') || 
+            origin.endsWith('.vercel.app')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
