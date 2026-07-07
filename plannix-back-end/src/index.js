@@ -5,7 +5,7 @@ const cors = require("cors")
 //uso de servidor
 const app = express();
 //port
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 //ficheros de rutas
 const authRoutes = require('./routes/authRoutes')
@@ -24,7 +24,15 @@ require('dotenv').config();
 
 //  CORS para todas las peticiones 
 app.use(cors({
-    origin: 'http://localhost:5173', // mi front
+    origin: function (origin, callback) {
+        if (!origin || 
+            origin.includes('localhost') || 
+            origin.endsWith('.vercel.app')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
@@ -57,6 +65,6 @@ bot.launch().then(() => {
     console.error("Error al iniciar el bot:", err);
 });
 
-app.listen(PORT,()=>{
+app.listen(PORT,'0.0.0.0',()=>{
     console.log(`Servidor funciona en http://localhost:${PORT}`)
 })

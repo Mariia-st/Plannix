@@ -2,7 +2,7 @@ import axios from 'axios';
 
 //configuracion base de mi api
 const api=axios.create({
-    baseURL: 'http://localhost:3000', //mi back
+    baseURL: import.meta.env.VITE_API_URL, //mi back
     headers:{
         'Content-Type':'application/json'
     },

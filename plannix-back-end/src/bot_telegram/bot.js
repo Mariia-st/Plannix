@@ -131,6 +131,7 @@ bot.command("code", async (context) => {
       return context.reply(
         "El código es incorrecto o ha expirado. Genera uno nuevo en tu perfil.",
       );
+      
     }
 
     //quitamos datos viejos y dejanos solo id de telegram para no entrar cada vez de nuevo 
@@ -188,6 +189,7 @@ bot.action("list_tasks", async (ctx) => {
 
   if (!user) {
     ctx.reply("Primero debes vincular tu cuenta con /code");
+    return;
   }
 // con taskservice manejamos el bbdd
   const tasks = await taskService.getTasks(user.id);
@@ -220,6 +222,7 @@ bot.action(/^list_(.+)$/, async(ctx)=>{
   
   if(!user){
     ctx.reply("Primero debes vincular tu cuenta con /code")
+    return
   }
   
   const idTask=ctx.match[1] // id de nuestra tarea que viene desde callback de boton list_(id)
@@ -271,6 +274,7 @@ bot.action(/^confirm_delete_(.+)$/, async (ctx) => {
 
   if (!user) {
     return ctx.reply("Primero debes vincular tu cuenta con /code");
+
   }
 
   const taskId = ctx.match[1];

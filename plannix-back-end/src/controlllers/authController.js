@@ -7,6 +7,7 @@ const SECRET_KEY = process.env.SECRET_KEY || "local_secret_key";
 //register de usuario
 const register = async (req, res) => {
   //recibimos datos de request
+
   const { name, email, password } = req.body;
   //hash de contraseña
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -30,6 +31,7 @@ const register = async (req, res) => {
       .json({ error: "Error interno de servidor o error de base de datos" });
   }
 };
+
 
 //login de usuario
 const login = async (req, res) => {
