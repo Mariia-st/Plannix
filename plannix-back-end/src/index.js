@@ -23,19 +23,22 @@ const bot= require("./bot_telegram/bot")
 require('dotenv').config();
 
 //  CORS para todas las peticiones 
-app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || 
-            origin.includes('localhost') || 
-            origin.endsWith('.vercel.app')) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
-}));
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    // Разрешаем любой запрос с твоего фронтенда или localhost
+    if (!origin || origin.includes('localhost') || origin.endsWith('.vercel.app')) {
+        res.header('Access-Control-Allow-Origin', origin || '*');
+    }
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+
+    // Если это OPTIONS-запрос (префлайт), отвечаем сразу
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    next();
+});
 
 //esto hace que la carpeta sea accesible desde el navegador
 app.use("/uploads", express.static(path.join(__dirname,"public","uploads")))
