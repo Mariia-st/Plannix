@@ -24,7 +24,10 @@ require('dotenv').config();
 
 //  CORS para todas las peticiones 
 app.use(cors({
-    origin: '*', // mi front
+    origin: 
+    ['http://localhost:5173', 
+    'https://plannix-eosin.vercel.app',
+    'https://plannix-hr03s67y2-mariia-str-project.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
