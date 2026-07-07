@@ -4,7 +4,7 @@ const prisma = require("../db")
 //llave secreto para firma de jwt, para asegurar que el token es real
 const SECRET_KEY = process.env.SECRET_KEY || "local_secret_key";
 
-/* //register de usuario
+//register de usuario
 const register = async (req, res) => {
   //recibimos datos de request
 
@@ -31,29 +31,7 @@ const register = async (req, res) => {
       .json({ error: "Error interno de servidor o error de base de datos" });
   }
 };
- */
-const register = async (req, res) => {
-  console.log("1. Запрос пришел в register"); 
-  try {
-    const { name, email, password } = req.body;
-    console.log("2. Данные получены:", { name, email }); 
-    
-    const hashedPassword = await bcrypt.hash(password, 10);
-    
-    console.log("3. Пароль зашифрован, создаю пользователя..."); 
-    const user = await prisma.user.create({
-      data: { name, email, password: hashedPassword },
-    });
-    
-    console.log("4. Пользователь создан!"); 
-    const token = jwt.sign({ userId: user.id }, SECRET_KEY, { expiresIn: "30m" });
-    
-    return res.status(200).json({ message: "Успех", user, token }); 
-  } catch (error) {
-    console.log("5. Ошибка в catch:", error); 
-    return res.status(500).json({ error: "Ошибка" }); 
-  }
-};
+
 
 //login de usuario
 const login = async (req, res) => {
