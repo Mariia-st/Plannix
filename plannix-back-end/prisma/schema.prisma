@@ -38,7 +38,11 @@ model User{
   password String
   avatar String?
   task Task[] // relación con task, puede tener muchos 
-  createdAt DateTime  @default(now())
+  //campos de telegram
+  telegramId    String?   @unique
+  //codigo temporal 
+  telegramCode  String?
+  codeExpiresAt DateTime?
 
 }
 

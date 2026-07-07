@@ -2,7 +2,8 @@
     "compilerOptions": {
       "module": "commonjs",
       "target": "es6",
-      "checkJs": true
+      "checkJs": false, // Desactiva la validación estricta de tipos (evita errores falsos)
+     "allowJs": true // Habilita el soporte y análisis de archivos JavaScript
     },
     "exclude": ["node_modules"]
   }
