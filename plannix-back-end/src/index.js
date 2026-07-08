@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const app = express();
 // Usamos el puerto que asigne Railway o el 3000 por defecto
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 // Importación de rutas y servicios
 const authRoutes = require('./routes/authRoutes');
@@ -17,13 +17,7 @@ const bot = require("./bot_telegram/bot");
 // 1. Configuración de CORS
 // Solo permitimos peticiones de nuestro frontend en Vercel o localhost
 app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || origin.includes("localhost") || origin.endsWith(".vercel.app")) {
-            callback(null, true);
-        } else {
-            callback(new Error("No permitido por CORS"));
-        }
-    },
+    origin: "*", 
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 }));
