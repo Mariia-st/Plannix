@@ -82,7 +82,7 @@ export default function Layout({ children }) {
                 <img
                   type="button"
                   onClick={() => navigate("/perfil")}
-                  src={`http://localhost:3000${user.avatar}`}
+                  src={`${import.meta.env.VITE_API_URL}${user.avatar}`}
                   alt="Avatar"
                   className="rounded-circle shadow-sm"
                   style={{ width: "40px", height: "40px", objectFit: "cover" }}
