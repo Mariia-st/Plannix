@@ -111,7 +111,7 @@ export default function Layout({ children }) {
 
       <main
         ref={vantaRef}
-        className="flex-grow-1 d-flex flex-column justify-content-center align-items-center py-3 "
+        className="flex-grow-1 d-flex flex-column justify-content-center align-items-center py-3 min-vh-100 min-vw-100 "
       >
         <div style={{ position: "relative", zIndex: 1 }}>{children}</div>
       </main>
