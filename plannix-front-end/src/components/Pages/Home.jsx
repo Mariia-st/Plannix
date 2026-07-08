@@ -148,9 +148,9 @@ export default function Home() {
   }
 
   return (
-    <div className=" container ">
+    <div className="  container">
       <div className="row">
-        <div>
+       
           {/* si task no elegido */}
           {task !== null && (
             <motion.div
@@ -169,21 +169,24 @@ export default function Home() {
             </motion.div>
           )}
           {isCreated ? (
+            <div>
+
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.2 }}
-              className="alert  alert-success small"
+              className="alert  alert-success small  "
               role="alert"
-            >
+              >
               Tarea creada con exito !
             </motion.div>
+              </div>
           ) : (
             <div></div>
           )}
 
-            <div className=" row g-5">
-              <div className=" col-12  col-lg-7 ">
+            <div className=" row m-0  ">
+              <div className=" col-12 pb-2  col-lg-7 ">
                 <TaskList
                   tasks={tasks}
                   onSelectTask={getTaskById}
@@ -203,7 +206,7 @@ export default function Home() {
             </div>
        
           <div className="pt-5">
-            <section className="bg-white p-4 rounded-4 border shadow-sm d-flex flex-wrap align-items-center justify-content-between gap-4">
+            <section className="bg-white p-5 rounded-4 border shadow-sm d-flex flex-wrap align-items-center justify-content-between">
               <div style={{ maxWidth: "400px" }}>
                 <h3 className="h4 fw-bold text-dark mb-3">
                   <i className="bi bi-robot me-2"></i> Integración con Telegram
@@ -261,7 +264,7 @@ export default function Home() {
               </div>
             </section>
           </div>
-        </div>
+     
       </div>
     </div>
   );

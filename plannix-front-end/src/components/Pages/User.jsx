@@ -133,7 +133,7 @@ export default function User() {
               >
                 {user.avatar ? (
                   <img
-                    src={`http://localhost:3000${user.avatar}`}
+                    src={`${import.meta.env.VITE_API_URL}${user.avatar}`}
                     alt="Avatar"
                     className="rounded-circle shadow-sm"
                     style={{
