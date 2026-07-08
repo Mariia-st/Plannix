@@ -27,7 +27,6 @@ app.use(express.json()); // Para poder leer JSON en las peticiones
 
 
 const fs = require('fs');
-const path = require('path');
 
 
 const uploadDir = path.join(process.cwd(), 'src', 'public', 'uploads');
