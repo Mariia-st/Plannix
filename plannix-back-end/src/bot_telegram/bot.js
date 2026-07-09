@@ -88,14 +88,39 @@ const taskWizard = new Scenes.WizardScene(
       const deadlineDate = date ? new Date(date) : new Date();
       ctx.wizard.state.data.deadline = deadlineDate; // seteamos la fecha
 
-    const user = await prisma.user.findFirst({ where: { telegramId: ctx.from.id.toString() } });
 
-    await taskService.createTasks({ ...ctx.wizard.state.data, userId: user.id });
+      const timeKeyboard = Markup.inlineKeyboard([
+        [Markup.button.callback("09:00", "time_09:00"), Markup.button.callback("12:00", "time_12:00")],
+        [Markup.button.callback("15:00", "time_15:00"), Markup.button.callback("18:00", "time_18:00")],
+        [Markup.button.callback("21:00", "time_21:00")]
+      ]);
+  
+      ctx.editMessageText("📅 Fecha seleccionada. Ahora elige la hora:", timeKeyboard);
+      return ctx.wizard.next(); // Pasamos al último paso
+    },
 
-    ctx.editMessageText("✅ ¡Tarea creada con éxito!");
-    menu(ctx)
-    //acabamos el wizard
-    return ctx.scene.leave();
+
+    async (ctx) => {
+      if (!ctx.callbackQuery || !ctx.callbackQuery.data.startsWith("time_")) {
+        return ctx.answerCbQuery("Por favor, selecciona una hora.");
+      }
+  
+      const time = ctx.callbackQuery.data.replace("time_", ""); // "15:00"
+      const [hours, minutes] = time.split(":");
+  
+      // Actualizamos el objeto Date que ya teníamos
+      const finalDate = new Date(ctx.wizard.state.data.deadline);
+      finalDate.setHours(parseInt(hours), parseInt(minutes));
+      
+      ctx.wizard.state.data.deadline = finalDate;
+  
+      // Crear tarea en BBDD
+      const user = await prisma.user.findFirst({ where: { telegramId: ctx.from.id.toString() } });
+      await taskService.createTasks({ ...ctx.wizard.state.data, userId: user.id });
+  
+      ctx.editMessageText("✅ ¡Tarea creada con éxito con fecha y hora!");
+      menu(ctx);
+      return ctx.scene.leave();
   },
 
 );
@@ -205,7 +230,7 @@ bot.action("list_tasks", async (ctx) => {
 
   //sacamos las tareas primero como botones 
   const task_botons= tasks.map((t,index)=>[
-    Markup.button.callback(`${index+1} tarea: ${t.title}`,`list_${t.id}`)
+    Markup.button.callback(`${formatearFecha(task.deadline)} ${t.title}`,`list_${t.id}`)
   ])
 
   const kbt= Markup.inlineKeyboard(task_botons)
@@ -240,7 +265,7 @@ bot.action(/^list_(.+)$/, async(ctx)=>{
   `📅 *Deadline:* ${formatearFecha(task.deadline)}`;
 
   //buton para eliminar este tarea
-  const kb= Markup.inlineKeyboard([[Markup.button.callback("Eliminar este tarea",`delete_${task.id}`), Markup.button.callback("Menu", `menu`)]])
+  const kb= Markup.inlineKeyboard([[Markup.button.callback("Eliminar tarea",`delete_${task.id}`), Markup.button.callback("Menu", `menu`)]])
 
 
   ctx.editMessageText(`${message}`,{...kb, parse_mode:"HTML"})
