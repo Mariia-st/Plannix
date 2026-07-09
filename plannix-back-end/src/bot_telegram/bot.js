@@ -230,7 +230,7 @@ bot.action("list_tasks", async (ctx) => {
 
   //sacamos las tareas primero como botones 
   const task_botons= tasks.map((t,index)=>[
-    Markup.button.callback(`${formatearFecha(task.deadline)} ${t.title}`,`list_${t.id}`)
+    Markup.button.callback(`${formatearFecha(t.deadline)} ${t.title}`,`list_${t.id}`)
   ])
 
   const kbt= Markup.inlineKeyboard(task_botons)
