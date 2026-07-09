@@ -199,7 +199,12 @@ function menu(ctx) {
 
 
 bot.action("menu", async(ctx)=>{
+  try {
+    //con mensaje de listar tareas
+    await ctx.answerCbQuery("Menu");
+} catch (e) { }
   menu(ctx)
+
 })
 
 // responde al callback de boton del menu
