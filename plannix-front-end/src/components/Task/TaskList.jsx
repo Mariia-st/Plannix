@@ -29,7 +29,7 @@ export default function TaskList({
   });
 
   return (
-    <div className="bg-white bg-opacity-75 p-3 border rounded">
+    <div className="bg-white bg-opacity-75 p-3 border rounded" >
       {/* Usamos 'row' para controlar el diseño según el tamaño */}
       <div className="row g-3">
         {/* Menú lateral: visible solo en pantallas medianas (md) en adelante */}
@@ -45,10 +45,10 @@ export default function TaskList({
               sortedTasks.map((task, id) => (
                 <a
                   key={task.id}
-                  className="list-group-item list-group-item-action small text-center p-2"
+                  className="list-group-item list-group-item-action small text-center p-2 bg-primary bg-opacity-75 text-white"
                   href={`#list-item-${task.id}`}
                 >
-                  Tarea {id + 1}
+                  { task.deadline ? new Date(task.deadline).toISOString().slice(0,10): "Sin fecha"}
                 </a>
               ))
             )}
@@ -71,12 +71,12 @@ export default function TaskList({
               </div>
             ) : (
               sortedTasks.map((task, index) => (
-                <div className="border-bottom py-2" key={task.id}>
+                <div className="border-bottom py-2" key={task.id}  onDoubleClick={() => onSelectTask(task.id)}>
                   <span
                     className="text-muted small"
                     id={`list-item-${task.id}`}
                   >
-                    Tarea {index + 1}
+                    { task.deadline ? new Date(task.deadline).toISOString().slice(0,10): "Sin fecha"}
                   </span>
                   <div className="d-flex align-items-center flex-wrap gap-2">
                     <strong
