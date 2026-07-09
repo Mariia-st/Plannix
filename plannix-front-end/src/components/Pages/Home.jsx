@@ -3,7 +3,7 @@ import api from "../../api/axios";
 import TaskList from "../Task/TaskList";
 import TaskForm from "../Task/TaskForm";
 import TaskDetail from "../Task/TaskDetail";
-import { hover, motion, time } from "motion/react";
+import { motion } from "motion/react";
 
 export default function Home() {
   //lista de tareas
@@ -153,10 +153,12 @@ export default function Home() {
        
           {/* si task no elegido */}
           {task !== null && (
-            <motion.div
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.3 }}
+            <div onClick ={(e)=>
+              {if (e.target === e.currentTarget) {
+              setTask(null);}
+            }}
+              
+             className="fixed-top vh-100 vw-100 d-flex justify-content-center align-items-center bg-black bg-opacity-50"
             >
               <TaskDetail
                 task={task}
@@ -166,7 +168,7 @@ export default function Home() {
                 updateTask={updateTask}
                 loading={loading}
               />
-            </motion.div>
+            </div>
           )}
           {isCreated ? (
             <div>
