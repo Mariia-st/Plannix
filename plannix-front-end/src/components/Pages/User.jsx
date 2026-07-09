@@ -114,171 +114,79 @@ export default function User() {
   };
 
   return (
-    <>
-      <div className=" container">
-        <div className=" row ">
-          <div className="bg-white d-flex flex-column gap-5 p-5 rounded ">
-            <div>
-              <button
-                className="btn btn-outline-dark"
-                onClick={() => navigate("/inicio")}
-              >
-                ← inicio
-              </button>
-            </div>
-            <div className="d-flex flex  gap-4 align-items-center">
-              <div
-                className="position-relative"
-                style={{ width: "200px", height: "200px" }}
-              >
-                {user.avatar ? (
-                  <img
-                    src={`${import.meta.env.VITE_API_URL}${user.avatar}`}
-                    alt="Avatar"
-                    className="rounded-circle shadow-sm"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
-                ) : (
-                  <div
-                    className="bg-light text-secondary d-flex align-items-center justify-content-center rounded-circle shadow-sm"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      fontSize: "6rem",
-                    }}
-                  >
-                    {user.name ? user.name[0].toUpperCase() : "?"}
-                  </div>
-                )}
-                <label
-                  htmlFor="upload-photo"
-                  className="btn btn-light border border-1 border-black rounded-pill position-absolute"
-                  style={{
-                    bottom: "10px",
-                    right: "10px",
-                    cursor: "pointer",
-                    padding: "10px 15px",
-                  }}
-                >
-                  <span style={{ fontSize: "1.5rem" }}>📷</span>
-                </label>
-
-                <input
-                  type="file"
-                  id="upload-photo"
-                  hidden
-                  accept="image/*"
-                  onChange={handleImageChange}
-                />
-              </div>
-              <form onSubmit={handleSubmit}>
-                <div className="d-flex flex-column gap-2">
-                  {!update ? (
-                    <h1>{user.name}</h1>
-                  ) : (
-                    <div className="form-floating">
-                      <input
-                        name="name"
-                        type="text"
-                        className="form-control form-control-lg"
-                        id="floatingName"
-                        placeholder="Tu nombre"
-                        value={form.name}
-                        onChange={handleChange}
-                      />
-                      <label htmlFor="floatingName">Nombre</label>
-                    </div>
-                  )}
-                  {!update ? (
-                    <h1>{user.email}</h1>
-                  ) : (
-                    <div className="form-floating">
-                      <input
-                        name="email"
-                        type="email"
-                        className="form-control form-control-lg"
-                        id="floatingName"
-                        placeholder="Tu email"
-                        value={form.email}
-                        onChange={handleChange}
-                      />
-                      <label htmlFor="floatingEmail">Email</label>
-                    </div>
-                  )}
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className="col-10 col-md-10 col-lg-8 bg-white p-4 p-md-5 rounded shadow-sm">
+          
+   
+          <div className="mb-4">
+            <button className="btn btn-outline-dark btn-sm" onClick={() => navigate("/inicio")}>
+              ← inicio
+            </button>
+          </div>
+  
+         
+          <div className="d-flex flex-column flex-sm-row gap-4 align-items-center align-items-sm-start mb-5">
+            
+           
+            <div className="position-relative" style={{ width: "180px", height: "180px", flexShrink: 0}}>
+              {user.avatar ? (
+                <img src={`${import.meta.env.VITE_API_URL}${user.avatar}`} alt="Avatar" className="rounded-circle shadow-sm w-100 h-100" style={{ objectFit: "cover" }} />
+              ) : (
+                <div className="bg-light text-secondary d-flex align-items-center justify-content-center rounded-circle shadow-sm w-100 h-100 fs-1">
+                  {user.name ? user.name[0].toUpperCase() : "?"}
                 </div>
+              )}
+              <label htmlFor="upload-photo" className="btn btn-light border rounded-pill position-absolute" style={{ bottom: "0", right: "0" }}>
+                📷
+              </label>
+              <input type="file" id="upload-photo" hidden accept="image/*" onChange={handleImageChange} />
+            </div>
+  
+     
+            <form onSubmit={handleSubmit} className="w-100">
+              <div className="d-flex flex-column gap-3">
                 {!update ? (
-                  <button
-                    type="button"
-                    className="btn btn-outline-dark btn-sm mt-2"
-                    onClick={() => setUpdate(!update)}
-                  >
-                    Editar perfil
-                  </button>
+                  <>
+                    <h2 className="m-0">{user.name}</h2>
+                    <p className="text-muted m-0">{user.email}</p>
+                  </>
                 ) : (
-                  <div className="mt-2 d-flex gap-2">
-                    <button
-                      type="submit"
-                      className="btn btn-outline-success btn-sm "
-                      disabled={
-                        (form.name === user.name &&
-                          form.email === user.email) ||
-                        loading
-                      }
-                    >
-                      Guardar
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-outline-dark btn-sm "
-                      onClick={close}
-                    >
-                      Cancel
-                    </button>
+                  <div className="d-flex flex-column gap-2">
+                    <input name="name" className="form-control" value={form.name} onChange={handleChange} />
+                    <input name="email" className="form-control" value={form.email} onChange={handleChange} />
                   </div>
                 )}
-              </form>
+               
+                <div>
+                  {!update 
+                    ? <button type="button" className="btn btn-outline-dark btn-sm" onClick={() => setUpdate(true)}>Editar perfil</button>
+                    : <div className="d-flex gap-2">
+                        <button type="submit" className="btn btn-success btn-sm">Guardar</button>
+                        <button type="button" className="btn btn-secondary btn-sm" onClick={close}>Cancel</button>
+                      </div>
+                  }
+                </div>
+              </div>
+            </form>
+          </div>
+  
+ 
+          <hr />
+          <div className="row g-3">
+            <h5 className="mb-3">Cambiar contraseña</h5>
+            <div className="col-12 col-md-6">
+              <input name="old_password" type="password" className="form-control" placeholder="Contraseña actual" value={form.old_password} onChange={handleChange} />
             </div>
-
-            <div className="d-flex flex-column gap-4">
-              <div className="form-floating">
-                <input
-                  name="old_password"
-                  type="password" // ¡Importante usar type="password"!
-                  className="form-control"
-                  placeholder="Contraseña actual"
-                  value={form.old_password}
-                  onChange={handleChange}
-                />
-                <label>Contraseña actual</label>
-              </div>
-              <div className="form-floating">
-                <input
-                  name="password"
-                  type="password"
-                  className="form-control"
-                  placeholder="Nueva contraseña"
-                  value={form.password}
-                  onChange={handleChange}
-                />
-                <label>Nueva contraseña</label>
-              </div>
-
-              <button
-                className="btn btn-outline-dark"
-                type="button"
-                onClick={handlePasswordSubmit}
-                disabled={!form.password || !form.old_password || loading}
-              >
-                Guardar contraseña
-              </button>
+            <div className="col-12 col-md-6">
+              <input name="password" type="password" className="form-control" placeholder="Nueva contraseña" value={form.password} onChange={handleChange} />
+            </div>
+            <div className="col-12">
+              <button className="btn btn-dark w-100 w-md-auto" onClick={handlePasswordSubmit}>Guardar contraseña</button>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
