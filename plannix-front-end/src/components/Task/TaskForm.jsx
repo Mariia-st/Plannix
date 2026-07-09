@@ -61,7 +61,8 @@ export default function TaskForm({
         </div>
         <input
           name="deadline"
-          type="date"
+          lang="es-ES"
+          type="datetime-local"
           className="form-control"
           onChange={handleChange}
           value={formData.deadline}

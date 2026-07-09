@@ -172,6 +172,11 @@ function menu(ctx) {
   ctx.reply("¡Hola! Soy PlannixBot. ¿Qué quieres hacer hoy?", keybord);
 }
 
+
+bot.action("menu", async(ctx)=>{
+  menu(ctx)
+})
+
 // responde al callback de boton del menu
 bot.action("list_tasks", async (ctx) => {
 
@@ -235,7 +240,7 @@ bot.action(/^list_(.+)$/, async(ctx)=>{
   `📅 *Deadline:* ${formatearFecha(task.deadline)}`;
 
   //buton para eliminar este tarea
-  const kb= Markup.inlineKeyboard([[Markup.button.callback("Eliminar este tarea",`delete_${task.id}`)]])
+  const kb= Markup.inlineKeyboard([[Markup.button.callback("Eliminar este tarea",`delete_${task.id}`), Markup.button.callback("Menu", `menu`)]])
 
 
   ctx.editMessageText(`${message}`,{...kb, parse_mode:"HTML"})
@@ -308,6 +313,8 @@ function formatearFecha(fechaISO) {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
+    hour: "2-digit",   
+    minute: "2-digit",
   });
 }
 
