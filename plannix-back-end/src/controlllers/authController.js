@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const prisma = require("../db")
+const prisma = require("../db");
 //llave secreto para firma de jwt, para asegurar que el token es real
 const SECRET_KEY = process.env.SECRET_KEY || "local_secret_key";
 
@@ -20,7 +20,7 @@ const register = async (req, res) => {
 
     const token = jwt.sign({ userId: user.id }, SECRET_KEY, { expiresIn: "30m" });
 
-    res.status(200).json({ menssage: "Usuario creado con exito", user: user, token:token });
+    res.status(200).json({ menssage: "Usuario creado con exito", user: user, token: token });
   } catch (error) {
     //si email se repite
     if (error.code === "ER_DUP_ENTRY" || error.errno === 1062) {
@@ -51,7 +51,7 @@ const me = async (req, res) => {
   const { userId } = req.user;
 
   try {
-    const user = await prisma.user.findUnique({ where: {id: userId } });
+    const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado" });
@@ -60,12 +60,29 @@ const me = async (req, res) => {
     res.status(200).json({
       name: user.name,
       email: user.email,
-      avatar:user.avatar,
+      avatar: user.avatar,
     });
   } catch (error) {
-    res.status(500).json({ message: "Error interno de servidor",details:error.message });
+    res.status(500).json({ message: "Error interno de servidor", details: error.message });
   }
 };
 
+
+const refresh = async (req, res) => {
+
+  try {
+
+    const newToken = jwt.sign({ userId: req.user.userId }, SECRET_KEY, { expiresIn: "5h" })
+
+
+    return res.status(200).json({ message: "Token refrescado con exito", access_token: newToken })
+
+  } catch (error) {
+    return res.status(500).json({ message: "Error interno de servidor" })
+  }
+
+}
+
+
 //exportamos nuestros metodos
-module.exports = { register, login,me };
+module.exports = { register, login, me, refresh };
